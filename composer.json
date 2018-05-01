@@ -1,0 +1,47 @@
+{
+  "name": "inerciacreativa/wp-event-manager",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "description": "Sencillo gestor de eventos",
+  "homepage": "https://github.com/inerciacreativa/wp-event-manager",
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "wordpress-plugin"
+  ],
+  "authors": [
+    {
+      "name": "José Cuesta",
+      "email": "jose.cuesta@inerciacreativa.com",
+      "homepage": "https://inerciacreativa.com",
+      "role": "Developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/inerciacreativa/wp-framework"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "composer/installers": "^1.5",
+    "inerciacreativa/wp-framework": "~2.0",
+    "wpackagist-plugin/contact-form-7": "~5.0"
+  },
+  "config": {
+    "vendor-dir": "vendor"
+  },
+  "extra": {
+    "installer-name": "ic-event-manager"
+  },
+  "autoload": {
+    "psr-4": {
+      "ic\\Plugin\\EventManager\\": "source/"
+    }
+  }
+}

@@ -1,0 +1,221 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ic Event Manager\n"
+"POT-Creation-Date: 2018-05-01 05:41+0200\n"
+"PO-Revision-Date: 2018-05-01 05:42+0200\n"
+"Last-Translator: \n"
+"Language-Team: Jose Cuesta <jose.cuesta@inerciacreativa.com>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.7\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
+"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: source/Backend.php:60 source/EventManager.php:101
+msgid "Organizer"
+msgstr "Organizador"
+
+#: source/Backend.php:61 source/Backend.php:69
+msgid "Enable"
+msgstr "Habilitar"
+
+#: source/Backend.php:62
+msgid "Allows to specify an organizer for the event."
+msgstr "Permite especificar un organizador para el evento."
+
+#: source/Backend.php:64
+msgid "Default organizer"
+msgstr "Organizador por defecto"
+
+#: source/Backend.php:68
+msgid "Calendar"
+msgstr "Calendario"
+
+#: source/Backend.php:70
+msgid "Creates a feed with the events in iCalendar format."
+msgstr "Crea un feed con los eventos en formato iCalendar."
+
+#: source/Backend.php:72
+msgid "Include the blog name"
+msgstr "Incluye el nombre del blog"
+
+#: source/Backend.php:73
+msgid "Specifies the blog name as the calendar name."
+msgstr "Usa el nombre del blog como nombre del calendario."
+
+#: source/Backend.php:74
+msgid ""
+"Uses the property <code>X-WR-CALNAME</code>. May cause problems in some "
+"applications."
+msgstr ""
+"Usa la propiedad <code>X-WR-CALNAME</code>. Puede causar problemas con "
+"algunas aplicaciones."
+
+#: source/Backend.php:76
+msgid "Limit the events"
+msgstr "Límite de eventos"
+
+#: source/Backend.php:78
+msgid "Type <code>0</code> to include all events."
+msgstr "Con <code>0</code> se incluyen todos los eventos."
+
+#: source/Backend.php:80
+msgid "Image size"
+msgstr "Tamaño de imagen"
+
+#: source/Backend.php:96
+msgid "Custom structures for events"
+msgstr "Estructuras personalizadas para los eventos"
+
+#: source/Backend.php:97
+msgid "Event base"
+msgstr "Evento base"
+
+#: source/Backend.php:102
+msgid "Organizer base"
+msgstr "Organizador base"
+
+#: source/CustomFields.php:67 source/EventManager.php:87
+msgid "Event"
+msgstr "Evento"
+
+#: source/CustomFields.php:71
+msgid "Event website"
+msgstr "Web del evento"
+
+#: source/CustomFields.php:83
+msgid "Date"
+msgstr "Fecha"
+
+#: source/CustomFields.php:89
+msgid "All day event"
+msgstr "El evento dura todo el día"
+
+#: source/CustomFields.php:97
+msgid "Show end date"
+msgstr "Mostrar fecha de fin"
+
+#: source/CustomFields.php:105
+msgid "Start date"
+msgstr "Fecha de inicio"
+
+#: source/CustomFields.php:115 source/CustomFields.php:161
+msgid "Start time"
+msgstr "Hora de inicio"
+
+#: source/CustomFields.php:195
+msgid "End date"
+msgstr "Fecha de fin"
+
+#: source/CustomFields.php:204 source/CustomFields.php:250
+msgid "End time"
+msgstr "Hora de fin"
+
+#: source/CustomFields.php:284
+msgid "Location"
+msgstr "Lugar"
+
+#: source/CustomFields.php:290
+msgid "Venue"
+msgstr "Nombre del sitio"
+
+#: source/CustomFields.php:302
+msgid "Address"
+msgstr "Dirección"
+
+#: source/CustomFields.php:314
+msgid "City"
+msgstr "Ciudad"
+
+#: source/EventManager.php:29
+msgid ""
+"This plugin requires <a href=\"https://wordpress.org/plugins/advanced-custom-"
+"fields/\" target=\"_blank\">Advanced Custom Fields</a>. Please, install and "
+"activate ACF before activating this plugin."
+msgstr ""
+"Este plugin necesita <a href=\"https://wordpress.org/plugins/advanced-custom-"
+"fields/\" target=\"_blank\">Advanced Custom Fields</a>. Por favor, instala y "
+"activa ACF antes de activa este plugin."
+
+#: source/EventManager.php:87
+msgid "Events"
+msgstr "Eventos"
+
+#: source/EventManager.php:101
+msgid "Organizers"
+msgstr "Organizadores"
+
+#: source/Frontend.php:40
+msgid "Subscribe to events — iCalendar"
+msgstr "Suscríbete a los eventos — iCalendar"
+
+#~ msgctxt "slug"
+#~ msgid "events"
+#~ msgstr "eventos"
+
+#~ msgctxt "slug"
+#~ msgid "organizers"
+#~ msgstr "organizadores"
+
+#~ msgid "Subscribe to iCalendar"
+#~ msgstr "Suscribirse a iCalendar"
+
+#~ msgid ""
+#~ "This plugin requires Advanced Custom Fields. Please, install and activate "
+#~ "ACF before activating this plugin."
+#~ msgstr "Este plugin necesita Advanced Custom Fields"
+
+#~ msgid "iCalendar"
+#~ msgstr "iCalendar"
+
+#~ msgid "Enable series archive"
+#~ msgstr "Habilitar el archivo de la serie"
+
+#~ msgid "Post types"
+#~ msgstr "Tipos de entradas"
+
+#~ msgid "Visualization options"
+#~ msgstr "Opciones de visualización"
+
+#~ msgid "Include scheduled posts"
+#~ msgstr "Incluir artículos programados"
+
+#~ msgid "Position of the list"
+#~ msgstr "Posición donde se mostrarán"
+
+#~ msgid "Series base"
+#~ msgstr "Series base"
+
+#~ msgid "Before the content"
+#~ msgstr "Antes del contenido"
+
+#~ msgid "After the content"
+#~ msgstr "Después del contenido"
+
+#~ msgid "Filter by post series"
+#~ msgstr "Filtrar por series de entradas"
+
+#~ msgid "All series"
+#~ msgstr "Todas las series"
+
+#~ msgid "This is post %d of %d in the series <em>&ldquo;%s&rdquo;</em>"
+#~ msgstr "Este es el artículo %d de %d de la serie <em>&ldquo;%s&rdquo;</em>"
+
+#~ msgid "%s &ndash;&nbsp;<em>Scheduled for %s</em>"
+#~ msgstr "%s &ndash;&nbsp;<em>Programado para el %s</em>"
+
+#~ msgid "Series"
+#~ msgstr "Series"
+
+#~ msgid "%s &ndash; <em>Scheduled for %s</em>"
+#~ msgstr "%s &ndash; <em>Programado para %s</em>"
+
+#~ msgid "Show link list after the content"
+#~ msgstr "Mostrar enlaces después del contenido"
