@@ -50,7 +50,7 @@ class Frontend extends PluginClass
 	 */
 	protected function filterEvents(\WP_Query $query): void
 	{
-		if (empty($query->query) || !isset($query->query['post_type']) || ($query->query['post_type'] !== EventManager::POST_TYPE) || $query->is_main_query()) {
+		if (empty($query->query) || !isset($query->query['post_type']) || ($query->query['post_type'] !== EventManager::POST_TYPE) || isset($query->query[EventManager::QUERY_ALL]) || $query->is_main_query()) {
 			return;
 		}
 

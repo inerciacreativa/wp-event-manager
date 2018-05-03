@@ -20,6 +20,8 @@ class EventManager extends Plugin
 
 	public const FEED_TYPE = 'calendar';
 
+	public const QUERY_ALL = '_all_events_';
+
 	/**
 	 * @inheritdoc
 	 */

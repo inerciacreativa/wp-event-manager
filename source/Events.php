@@ -109,6 +109,8 @@ class Events
 				'meta_compare' => '>=',
 				'meta_value'   => Date::now()->format('Ymd'),
 			]);
+		} else {
+			$arguments[EventManager::QUERY_ALL] = true;
 		}
 
 		return new \WP_Query($arguments);
