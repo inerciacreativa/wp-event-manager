@@ -150,6 +150,20 @@ class EventManager extends Plugin
 	}
 
 	/**
+	 * @param int  $limit
+	 * @param bool $past
+	 *
+	 * @return array
+	 *
+	 * @throws \RuntimeException
+	 * @throws \InvalidArgumentException
+	 */
+	public function getEvents(int $limit = 0, bool $past = false): array
+	{
+		return Events::create($this)->events($limit, $past);
+	}
+
+	/**
 	 * Retrieves the .ics file.
 	 *
 	 * @throws \RuntimeException

@@ -53,7 +53,7 @@ class Events
 		$filename = urlencode(strtolower($name . '-' . reset($language)) . '.ics');
 		$contents = $this->format($this->serialize([
 			'BEGIN'        => 'VCALENDAR',
-			'PRODID'       => sprintf('-//%s/Calendar %s//EN', $this->name, $this->version),
+			'PRODID'       => sprintf('-//%s/Calendar %s//EN', $this->name(), $this->version()),
 			'VERSION'      => '2.0',
 			'CALSCALE'     => 'GREGORIAN',
 			'METHOD'       => 'PUBLISH',
@@ -66,13 +66,14 @@ class Events
 	}
 
 	/**
-	 * @param int $limit
+	 * @param int  $limit
+	 * @param bool $past
 	 *
 	 * @return Event[]
 	 */
-	public function events(int $limit = 0): array
+	public function events(int $limit = 0, bool $past = false): array
 	{
-		$query  = $this->query($limit);
+		$query  = $this->query($limit, $past);
 		$events = [];
 
 		if ($query->have_posts()) {
@@ -89,20 +90,26 @@ class Events
 	}
 
 	/**
-	 * @param int $limit
+	 * @param int  $limit
+	 * @param bool $past
 	 *
 	 * @return \WP_Query
 	 */
-	public function query(int $limit = 0): \WP_Query
+	public function query(int $limit = 0, bool $past = false): \WP_Query
 	{
 		$arguments = [
 			'post_type'      => EventManager::POST_TYPE,
 			'posts_per_page' => $limit ?: -1,
 			'order'          => 'DESC',
-			'meta_key'       => 'date_end',
-			'meta_compare'   => '>=',
-			'meta_value'     => Date::now()->format('Ymd'),
 		];
+
+		if (!$past) {
+			$arguments = array_merge($arguments, [
+				'meta_key'     => 'date_end',
+				'meta_compare' => '>=',
+				'meta_value'   => Date::now()->format('Ymd'),
+			]);
+		}
 
 		return new \WP_Query($arguments);
 	}
