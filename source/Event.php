@@ -2,6 +2,7 @@
 
 namespace ic\Plugin\EventManager;
 
+use ic\Framework\Support\Date;
 use ic\Framework\Support\Str;
 use ic\Framework\Support\TextLimiter;
 
@@ -27,6 +28,11 @@ class Event
 	 * @var string
 	 */
 	private $uri;
+
+	/**
+	 * @var string
+	 */
+	private $link;
 
 	/**
 	 * @var string
@@ -96,10 +102,11 @@ class Event
 	{
 		$this->calendar    = $calendar;
 		$this->uid         = $event['uid'];
-		$this->dateStamp   = $this->date();
+		$this->dateStamp   = Date::now();
 		$this->startDate   = $this->startDate($fields);
 		$this->endDate     = $this->endDate($fields);
 		$this->uri         = $event['uri'];
+		$this->link        = $event['link'];
 		$this->description = Str::whitespace($event['description']);
 		$this->summary     = $this->summary($event['summary']);
 		$this->location    = $this->location($fields);
@@ -174,37 +181,24 @@ class Event
 	}
 
 	/**
-	 * @param string $input
-	 *
-	 * @return \DateTime
-	 */
-	private function date(string $input = 'now'): \DateTime
-	{
-		$date = new \DateTime($input);
-		$date->setTimezone(new \DateTimeZone('UTC'));
-
-		return $date;
-	}
-
-	/**
 	 * @param array $event
 	 *
-	 * @return \DateTime
+	 * @return Date
 	 */
-	private function startDate(array $event): \DateTime
+	private function startDate(array $event): Date
 	{
 		$date = mysql2date('Y-m-d', $event['date_start']);
 		$time = $event['date_allday'] ? '00:00:00' : sprintf('%d:%d:00', $event['time_start_hour'], $event['time_start_minutes']);
 
-		return $this->date("$date $time");
+		return Date::create("$date $time");
 	}
 
 	/**
 	 * @param array $event
 	 *
-	 * @return \DateTime
+	 * @return Date
 	 */
-	private function endDate(array $event): \DateTime
+	private function endDate(array $event): Date
 	{
 		if (empty($event['date_end']) || ($event['date_end'] === $event['date_start'])) {
 			$date = mysql2date('Y-m-d', $event['date_start']);
@@ -214,7 +208,7 @@ class Event
 			$time = $event['date_allday'] ? '00:00:00' : sprintf('%d:%d:00', $event['time_end_hour'], $event['time_end_minutes']);
 		}
 
-		return $this->date("$date $time");
+		return Date::create("$date $time");
 	}
 
 	/**
