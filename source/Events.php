@@ -128,7 +128,8 @@ class Events
 	{
 		$event = [
 			'uid'         => $post->ID,
-			'uri'         => wp_get_shortlink($post),
+			'uri'         => home_url('?p=' . $post->ID),
+			'link'        => get_permalink($post),
 			'description' => get_the_title($post),
 			'summary'     => $this->getSummary($post),
 			'organizer'   => $this->getOrganizer($post),
