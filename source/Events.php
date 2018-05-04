@@ -51,6 +51,7 @@ class Events
 		$name     = get_bloginfo('name');
 		$language = explode('-', get_bloginfo('language'));
 		$filename = urlencode(strtolower($name . '-' . reset($language)) . '.ics');
+		$events   = $this->events($this->getOption('calendar.image'), $this->getOption('calendar.limit'));
 		$contents = $this->format($this->serialize([
 			'BEGIN'        => 'VCALENDAR',
 			'PRODID'       => sprintf('-//%s/Calendar %s//EN', $this->name(), $this->version()),
@@ -58,7 +59,7 @@ class Events
 			'CALSCALE'     => 'GREGORIAN',
 			'METHOD'       => 'PUBLISH',
 			'X-WR-CALNAME' => $this->getOption('calendar.name') ? $name : '',
-			0              => implode('', $this->events($this->getOption('calendar.limit'))),
+			0              => implode('', $events),
 			'END'          => 'VCALENDAR',
 		]));
 
@@ -66,12 +67,13 @@ class Events
 	}
 
 	/**
-	 * @param int  $limit
-	 * @param bool $past
+	 * @param string $image
+	 * @param int    $limit
+	 * @param bool   $past
 	 *
 	 * @return Event[]
 	 */
-	public function events(int $limit = 0, bool $past = false): array
+	public function events(string $image = 'thumbnail', int $limit = 0, bool $past = false): array
 	{
 		$query  = $this->query($limit, $past);
 		$events = [];
@@ -80,7 +82,7 @@ class Events
 			while ($query->have_posts()) {
 				$query->the_post();
 
-				$events[] = $this->getEvent(get_post());
+				$events[] = $this->getEvent(get_post(), $image);
 			}
 		}
 
@@ -118,10 +120,11 @@ class Events
 
 	/**
 	 * @param \WP_Post $post
+	 * @param string   $image
 	 *
 	 * @return Event
 	 */
-	protected function getEvent(\WP_Post $post): ?Event
+	protected function getEvent(\WP_Post $post, string $image): ?Event
 	{
 		$event = [
 			'uid'         => $post->ID,
@@ -129,7 +132,7 @@ class Events
 			'description' => get_the_title($post),
 			'summary'     => $this->getSummary($post),
 			'organizer'   => $this->getOrganizer($post),
-			'image'       => $this->getImage($post, $this->getOption('calendar.image')),
+			'image'       => $this->getImage($post, $image),
 		];
 
 		$fields = get_fields($post->ID);
@@ -180,23 +183,27 @@ class Events
 	 * @param \WP_Post $post
 	 * @param string   $size
 	 *
-	 * @return string
+	 * @return \stdClass
 	 */
-	protected function getImage(\WP_Post $post, string $size): string
+	protected function getImage(\WP_Post $post, string $size): ?\stdClass
 	{
 		$id = get_post_meta($post->ID, '_thumbnail_id', true);
 
 		if (!$id) {
-			return '';
+			return null;
 		}
 
 		$image = wp_get_attachment_image_src($id, $size);
 
 		if (!$image) {
-			return '';
+			return null;
 		}
 
-		return $image[0];
+		return (object) [
+			'src'    => $image[0],
+			'width'  => $image[1],
+			'height' => $image[2],
+		];
 	}
 
 	/**

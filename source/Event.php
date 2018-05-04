@@ -167,7 +167,7 @@ class Event
 			'SUMMARY'       => $this->encode($this->summary),
 			'LOCATION'      => $this->encode($this->location),
 			'ORGANIZER'     => $this->encode($this->organizer),
-			'ATTACH'        => $this->image,
+			'ATTACH'        => $this->image ? $this->image->src : null,
 			'TRANSP'        => 'OPAQUE',
 			'END'           => 'VEVENT',
 		]);
