@@ -65,7 +65,7 @@ class Event
 	private $endDate;
 
 	/**
-	 * @var string
+	 * @var array
 	 */
 	private $location;
 
@@ -172,7 +172,7 @@ class Event
 			'URL;VALUE=URI' => $this->uri,
 			'DESCRIPTION'   => $this->encode($this->description),
 			'SUMMARY'       => $this->encode($this->summary),
-			'LOCATION'      => $this->encode($this->location),
+			'LOCATION'      => empty($this->location) ? null : $this->encode(implode(' — ', $this->location)),
 			'ORGANIZER'     => $this->encode($this->organizer),
 			'ATTACH'        => $this->image ? $this->image->src : null,
 			'TRANSP'        => 'OPAQUE',
@@ -238,19 +238,13 @@ class Event
 	/**
 	 * @param array $event
 	 *
-	 * @return string
+	 * @return array
 	 */
-	private function location(array $event): string
+	private function location(array $event): array
 	{
 		$keys     = array_flip(['venue', 'address', 'city']);
 		$location = array_intersect_key(array_replace($keys, $event), $keys);
 		$location = array_filter($location);
-
-		if (empty($location)) {
-			$location = '';
-		} else {
-			$location = implode(' — ', $location);
-		}
 
 		return $location;
 	}
