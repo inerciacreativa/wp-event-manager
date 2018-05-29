@@ -167,6 +167,17 @@ class EventManager extends Plugin
 	}
 
 	/**
+	 * @param \WP_Post $post
+	 * @param string   $image
+	 *
+	 * @return Event
+	 */
+	public function getEvent(\WP_Post $post, string $image = 'thumbnail'): Event
+	{
+		return Events::create($this)->event($post, $image);
+	}
+
+	/**
 	 * Retrieves the .ics file.
 	 *
 	 * @throws \RuntimeException

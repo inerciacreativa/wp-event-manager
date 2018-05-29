@@ -82,7 +82,7 @@ class Events
 			while ($query->have_posts()) {
 				$query->the_post();
 
-				$events[] = $this->getEvent(get_post(), $image);
+				$events[] = $this->event(get_post(), $image);
 			}
 		}
 
@@ -124,8 +124,14 @@ class Events
 	 *
 	 * @return Event
 	 */
-	protected function getEvent(\WP_Post $post, string $image): ?Event
+	public function event(\WP_Post $post, string $image): ?Event
 	{
+		$fields = get_fields($post->ID);
+
+		if (empty($fields)) {
+			return null;
+		}
+
 		$event = [
 			'uid'         => $post->ID,
 			'uri'         => home_url('?p=' . $post->ID),
@@ -135,12 +141,6 @@ class Events
 			'organizer'   => $this->getOrganizer($post),
 			'image'       => $this->getImage($post, $image),
 		];
-
-		$fields = get_fields($post->ID);
-
-		if (empty($fields)) {
-			return null;
-		}
 
 		return new Event($this, $event, $fields);
 

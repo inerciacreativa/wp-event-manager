@@ -226,7 +226,7 @@ class Event
 		}
 
 		$length  = Str::length($summary);
-		$summary = TextLimiter::words($summary, 60);
+		$summary = rtrim(TextLimiter::words($summary, 60));
 
 		if (!empty($summary) && ($length > Str::length($summary))) {
 			$summary .= '…';
