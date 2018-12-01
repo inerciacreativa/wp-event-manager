@@ -80,10 +80,10 @@ class Backend extends PluginClass
 				                ->image_sizes('calendar.image', __('Image size', $this->id()));
 			        })->onValidation(function ($values) {
 				        if (Arr::get($values, 'calendar.enable')) {
-					        add_feed(EventManager::FEED_TYPE, null);
+					        add_feed(EventManager::FEED_TYPE, $this->getPlugin()->getCalendar());
 				        }
 
-				        flush_rewrite_rules(false);
+				        flush_rewrite_rules();
 
 				        return $values;
 			        });
