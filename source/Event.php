@@ -75,6 +75,11 @@ class Event
 	private $organizer;
 
 	/**
+	 * @var string
+	 */
+	private $web;
+
+	/**
 	 * CalendarEvent constructor.
 	 *
 	 * @param Events $calendar
@@ -86,32 +91,30 @@ class Event
 	 * @type string  $summary
 	 * @type string  $organizer
 	 * @type string  $image
-	 *                      }
-	 *
-	 * @param array  $fields {
-	 *
 	 * @type string  $date_start
 	 * @type string  $date_end
 	 * @type string  $date_allday
 	 * @type string  $venue
 	 * @type string  $address
 	 * @type string  $city
+	 * @type string  $web
 	 *                       }
 	 */
-	public function __construct(Events $calendar, array $event, array $fields)
+	public function __construct(Events $calendar, array $event)
 	{
 		$this->calendar    = $calendar;
 		$this->uid         = $event['uid'];
 		$this->dateStamp   = Date::now();
-		$this->startDate   = $this->startDate($fields);
-		$this->endDate     = $this->endDate($fields);
+		$this->startDate   = $this->startDate($event);
+		$this->endDate     = $this->endDate($event);
 		$this->uri         = $event['uri'];
 		$this->link        = $event['link'];
 		$this->description = Str::whitespace($event['description']);
 		$this->summary     = $this->summary($event['summary']);
-		$this->location    = $this->location($fields);
+		$this->location    = $this->location($event);
 		$this->organizer   = $event['organizer'];
 		$this->image       = $event['image'];
+		$this->web         = $event['web'];
 	}
 
 	/**
@@ -170,6 +173,7 @@ class Event
 			'DTEND'         => $this->endDate->format('Ymd\THis\Z'),
 			'DTSTAMP'       => $this->dateStamp->format('Ymd\THis\Z'),
 			'URL;VALUE=URI' => $this->uri,
+			'URL'           => $this->web,
 			'DESCRIPTION'   => $this->encode($this->description),
 			'SUMMARY'       => $this->encode($this->summary),
 			'LOCATION'      => empty($this->location) ? null : $this->encode(implode(' — ', $this->location)),

@@ -132,17 +132,20 @@ class Events
 			return null;
 		}
 
-		$event = [
+		$fields['web'] = $fields['url'];
+		unset($fields['url']);
+
+		$event = array_merge([
 			'uid'         => $post->ID,
 			'uri'         => home_url('?p=' . $post->ID),
 			'link'        => get_permalink($post),
-			'description' => get_the_title($post),
+			'description' => html_entity_decode(get_the_title($post), ENT_HTML5 | ENT_QUOTES),
 			'summary'     => $this->getSummary($post),
 			'organizer'   => $this->getOrganizer($post),
 			'image'       => $this->getImage($post, $image),
-		];
+		], $fields);
 
-		return new Event($this, $event, $fields);
+		return new Event($this, $event);
 
 	}
 
