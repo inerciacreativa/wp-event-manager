@@ -31,7 +31,7 @@
     "php": ">=7.1",
     "composer/installers": "^1.5",
     "inerciacreativa/wp-framework": "^2.0",
-    "wpackagist-plugin/contact-form-7": "^5.0"
+    "wpackagist-plugin/advanced-custom-fields": "^5.0"
   },
   "config": {
     "vendor-dir": "vendor"
