@@ -1,65 +1,70 @@
-.acf_postbox .inside {
-    overflow: hidden;
+.acf-postbox .inside {
+  overflow: hidden;
 }
 
 /** All day **/
 
-.acf_postbox .field_type-true_false {
-    position: relative;
+.acf-postbox .acf-field-true-false {
+  position: relative;
 }
 
-.acf_postbox .field_type-true_false .label {
-    margin-left: 20px;
+.acf-postbox .acf-field-true-false .acf-label {
+  margin-left: 20px;
 }
 
-.acf_postbox .field_type-true_false .true_false {
-    position: absolute;
-    top: 12px;
-    left: 9px;
+.acf-postbox .acf-field-true-false .acf-input {
+  position: absolute;
+  top: 14px;
+  left: 10px;
 }
 
 /** Date **/
 
-.acf_postbox .field_type-date_picker {
-    float: left;
-    clear: left;
-    width: 110px;
-    border: none;
+.acf-postbox .acf-field-date-picker {
+  float: left;
+  clear: left;
+  width: 130px;
+  border: none;
 }
 
-.acf_postbox .acf-date_picker input {
-    width: 100px !important;
+.acf-postbox .acf-field-date-picker .acf-date-picker {
+  overflow: visible;
 }
 
-.acf_postbox .acf-date_picker:after {
+.acf-postbox .acf-field-date-picker input[type="text"] {
+  width: 100px !important;
+}
+
+.acf-postbox .acf-field-date-picker:after {
 }
 
 /** Time **/
 
-.acf_postbox .field_type-select {
-    float: left;
-    width: 50px;
-    padding-top: 20px !important;
-    border: none;
+.acf-postbox .acf-field-select {
+  float: left;
+  clear: none;
+  width: 70px;
+  padding-top: 20px !important;
+  border: none;
 }
 
-.acf_postbox .field_type-select .label {
-    overflow: hidden;
-    width: 0;
-    height: 14px;
+.acf-postbox .acf-field-select .acf-label {
+  overflow: hidden;
+  width: 0;
+  height: 14px;
 }
 
-.acf_postbox .field_type-select:before {
-    position: absolute;
-    top: 44px;
+.acf-postbox .acf-field-select:before {
+  position: absolute;
+  top: 44px;
 }
 
-.acf_postbox div[data-field_name$="hour"]:before {
-    left: -10px;
-    content: '@';
+.acf-postbox div[data-name$="hour"]:before {
+  left: -10px;
+  content: '@';
 }
 
-.acf_postbox div[data-field_name$="minutes"]:before {
-    left: 0;
-    content: ':';
+.acf-postbox div[data-name$="minutes"]:before {
+  left: 0;
+  content: ':';
 }
