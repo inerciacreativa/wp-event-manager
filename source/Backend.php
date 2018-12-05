@@ -3,9 +3,9 @@
 namespace ic\Plugin\EventManager;
 
 use ic\Framework\Plugin\PluginClass;
-use ic\Framework\Settings\Settings;
 use ic\Framework\Settings\Form\Section;
 use ic\Framework\Settings\Form\Tab;
+use ic\Framework\Settings\Settings;
 use ic\Framework\Support\Arr;
 
 /**
@@ -36,13 +36,15 @@ class Backend extends PluginClass
 		     ->on('wp_insert_post_data', 'filterEventStatus')
 		     ->off('future_' . EventManager::POST_TYPE, '_future_post_hook');
 
-		$this->addBackScript('admin.js', [
+		$this->addBackScript('event-manager.js', [
 			'depends' => ['jquery'],
 			'hooks'   => ['post.php', 'post-new.php'],
+			'version' => $this->version(),
 		]);
 
-		$this->addBackStyle('admin.css', [
-			'hooks' => ['post.php', 'post-new.php'],
+		$this->addBackStyle('event-manager.css', [
+			'hooks'   => ['post.php', 'post-new.php'],
+			'version' => $this->version(),
 		]);
 	}
 
@@ -64,29 +66,32 @@ class Backend extends PluginClass
 				                ->text('organizer.default', __('Default organizer', $this->id()), [
 					                'class' => 'regular-text',
 				                ]);
-			        })->addSection('calendar', function (Section $section) {
-				        $section->title(__('Calendar', $this->id()))
-				                ->checkbox('calendar.enable', __('Enable', $this->id()), [
-					                'label' => __('Creates a feed with the events in iCalendar format.', $this->id()),
-				                ])
-				                ->checkbox('calendar.name', __('Include the blog name', $this->id()), [
-					                'label'       => __('Specifies the blog name as the calendar name.', $this->id()),
-					                'description' => __('Uses the property <code>X-WR-CALNAME</code>. May cause problems in some applications.', $this->id()),
-				                ])
-				                ->number('calendar.limit', __('Limit the events', $this->id()), [
-					                'min'         => 0,
-					                'description' => __('Type <code>0</code> to include all events.', $this->id()),
-				                ])
-				                ->image_sizes('calendar.image', __('Image size', $this->id()));
-			        })->onValidation(function ($values) {
-				        if (Arr::get($values, 'calendar.enable')) {
-					        add_feed(EventManager::FEED_TYPE, $this->getPlugin()->getCalendar());
-				        }
+			        })
+			            ->addSection('calendar', function (Section $section) {
+				            $section->title(__('Calendar', $this->id()))
+				                    ->checkbox('calendar.enable', __('Enable', $this->id()), [
+					                    'label' => __('Creates a feed with the events in iCalendar format.', $this->id()),
+				                    ])
+				                    ->checkbox('calendar.name', __('Include the blog name', $this->id()), [
+					                    'label'       => __('Specifies the blog name as the calendar name.', $this->id()),
+					                    'description' => __('Uses the property <code>X-WR-CALNAME</code>. May cause problems in some applications.', $this->id()),
+				                    ])
+				                    ->number('calendar.limit', __('Limit the events', $this->id()), [
+					                    'min'         => 0,
+					                    'description' => __('Type <code>0</code> to include all events.', $this->id()),
+				                    ])
+				                    ->image_sizes('calendar.image', __('Image size', $this->id()));
+			            })
+			            ->onValidation(function ($values) {
+				            if (Arr::get($values, 'calendar.enable')) {
+					            add_feed(EventManager::FEED_TYPE, $this->getPlugin()
+					                                                   ->getCalendar());
+				            }
 
-				        flush_rewrite_rules();
+				            flush_rewrite_rules();
 
-				        return $values;
-			        });
+				            return $values;
+			            });
 		        });
 
 		$organizer = $this->getOption('organizer.enable');
@@ -143,8 +148,10 @@ class Backend extends PluginClass
 	{
 		$post = get_post($id);
 
-		if ($date = $this->getPlugin()->getEventDate($post)) {
-			$this->hook()->disable('filterPostDate');
+		if ($date = $this->getPlugin()
+		                 ->getEventDate($post)) {
+			$this->hook()
+			     ->disable('filterPostDate');
 
 			$post_date = sprintf('%s-%s-%s 00:00:00', $date['year'], $date['month'], $date['day']);
 
