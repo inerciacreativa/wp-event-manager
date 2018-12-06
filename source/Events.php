@@ -49,14 +49,13 @@ class Events
 
 	/**
 	 * @param string $image
-	 * @param int    $limit
-	 * @param bool   $past
+	 * @param array  $arguments
 	 *
 	 * @return Event[]
 	 */
-	public function events(string $image = 'thumbnail', int $limit = 0, bool $past = false): array
+	public function events(string $image = 'thumbnail', array $arguments = []): array
 	{
-		$query  = $this->query($limit, $past);
+		$query  = $this->query($arguments);
 		$events = [];
 
 		if ($query->have_posts()) {
@@ -67,36 +66,36 @@ class Events
 			}
 		}
 
-		$events = $this->hook()
-		               ->apply('ic_event_manager_events', $events);
+		$events = $this->hook()->apply('ic_event_manager_events', $events);
 
 		return $events;
 	}
 
 	/**
-	 * @param int  $limit
-	 * @param bool $past
+	 * @param array $arguments
 	 *
 	 * @return \WP_Query
 	 */
-	public function query(int $limit = 0, bool $past = false): \WP_Query
+	public function query(array $arguments = []): \WP_Query
 	{
-		$arguments = [
-			'post_type'      => EventManager::POST_TYPE,
-			'posts_per_page' => $limit ?: -1,
+		$arguments = array_merge([
+			'posts_per_page' => -1,
 			'order'          => 'DESC',
-		];
+		], $arguments, [
+			'post_type' => EventManager::POST_TYPE,
+		]);
 
-		if (!$past) {
+		if (empty($arguments['no_date_filter']) && empty($arguments['meta_key'])) {
 			$arguments = array_merge($arguments, [
 				'meta_key'     => 'date_end',
 				'meta_compare' => '>=',
-				'meta_value'   => Date::now()
-				                      ->format('Ymd'),
+				'meta_value'   => Date::now()->format('Ymd'),
 			]);
 		} else {
 			$arguments[EventManager::QUERY_ALL] = true;
 		}
+
+		unset($arguments['no_date_filter']);
 
 		return new \WP_Query($arguments);
 	}

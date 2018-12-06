@@ -158,18 +158,17 @@ class EventManager extends Plugin
 
 	/**
 	 * @param string $image
-	 * @param int    $limit
-	 * @param bool   $past
+	 * @param array  $arguments
 	 *
 	 * @return array
 	 *
 	 * @throws \RuntimeException
 	 * @throws \InvalidArgumentException
 	 */
-	public function getEvents(string $image = 'thumbnail', int $limit = 0, bool $past = false): array
+	public function getEvents(string $image = 'thumbnail', array $arguments = []): array
 	{
 		return Events::create($this)
-		             ->events($image, $limit, $past);
+		             ->events($image, $arguments);
 	}
 
 	/**

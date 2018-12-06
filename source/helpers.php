@@ -4,14 +4,14 @@ namespace ic\Plugin\EventManager;
 
 /**
  * @param string $image
- * @param int    $limit
- * @param bool   $past
+ * @param array  $arguments
  *
  * @return array
  */
-function events(string $image = 'thumbnail', int $limit = 0, bool $past = false): array
+function events(string $image = 'thumbnail', array $arguments = []): array
 {
-	return EventManager::instance()->getEvents($image, $limit, $past);
+	return EventManager::instance()
+	                   ->getEvents($image, $arguments);
 }
 
 /**
@@ -22,5 +22,6 @@ function events(string $image = 'thumbnail', int $limit = 0, bool $past = false)
  */
 function event(\WP_Post $post, string $image = 'thumbnail'): Event
 {
-	return EventManager::instance()->getEvent($post, $image);
+	return EventManager::instance()
+	                   ->getEvent($post, $image);
 }
