@@ -20,6 +20,8 @@ class EventManager extends Plugin
 
 	public const FEED_TYPE = 'calendar';
 
+	public const FEED_ACTION = 'download';
+
 	public const QUERY_ALL = '_all_events_';
 
 	/**
@@ -107,6 +109,9 @@ class EventManager extends Plugin
 
 		if ($this->getOption('calendar.enable')) {
 			add_feed(self::FEED_TYPE, [$this, 'getCalendar']);
+
+			$this->hook()
+			     ->on('template_redirect', 'getEventCalendar');
 		}
 	}
 
@@ -163,7 +168,8 @@ class EventManager extends Plugin
 	 */
 	public function getEvents(string $image = 'thumbnail', int $limit = 0, bool $past = false): array
 	{
-		return Events::create($this)->events($image, $limit, $past);
+		return Events::create($this)
+		             ->events($image, $limit, $past);
 	}
 
 	/**
@@ -174,7 +180,8 @@ class EventManager extends Plugin
 	 */
 	public function getEvent(\WP_Post $post, string $image = 'thumbnail'): Event
 	{
-		return Events::create($this)->event($post, $image);
+		return Events::create($this)
+		             ->event($post, $image);
 	}
 
 	/**
@@ -185,15 +192,26 @@ class EventManager extends Plugin
 	 */
 	public function getCalendar(): void
 	{
-		$calendar = Events::create($this)->calendar();
+		$events = Events::create($this)
+		                ->events($this->getOption('calendar.image'), $this->getOption('calendar.limit'));
 
-		header('Content-Description: File Transfer');
-		header('Content-Disposition: attachment; filename=' . $calendar['filename']);
-		header('Content-type: text/calendar; charset=utf-8');
-		header('Pragma: 0');
-		header('Expires: 0');
+		Calendar::create($this)
+		        ->addEvents($events)
+		        ->send();
+	}
 
-		echo $calendar['contents'];
+	/**
+	 *
+	 */
+	protected function getEventCalendar(): void
+	{
+		if (empty($_GET[self::FEED_ACTION]) || ($_GET[self::FEED_ACTION] !== self::FEED_TYPE) || !is_singular(self::POST_TYPE)) {
+			return;
+		}
+
+		Calendar::create($this)
+		        ->addPost(get_post())
+		        ->send();
 	}
 
 }
