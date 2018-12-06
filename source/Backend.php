@@ -84,8 +84,7 @@ class Backend extends PluginClass
 			            })
 			            ->onValidation(function ($values) {
 				            if (Arr::get($values, 'calendar.enable')) {
-					            add_feed(EventManager::FEED_TYPE, $this->getPlugin()
-					                                                   ->getCalendar());
+					            add_feed(EventManager::FEED_TYPE, [$this->getPlugin(), 'getCalendar']);
 				            }
 
 				            flush_rewrite_rules();
