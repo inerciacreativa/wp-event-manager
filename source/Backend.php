@@ -4,9 +4,9 @@ namespace ic\Plugin\EventManager;
 
 use ic\Framework\Plugin\PluginClass;
 use ic\Framework\Settings\Form\Section;
-use ic\Framework\Settings\Form\Tab;
 use ic\Framework\Settings\Settings;
 use ic\Framework\Support\Arr;
+use InvalidArgumentException;
 
 /**
  * Class Backend
@@ -21,7 +21,7 @@ class Backend extends PluginClass
 	/**
 	 * @inheritdoc
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
 	protected function configure(): void
 	{
@@ -50,53 +50,49 @@ class Backend extends PluginClass
 
 	/**
 	 * @inheritdoc
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	protected function initialize(): void
 	{
-		Settings::siteOptions($this->id(), $this->getOptions(), $this->name())
-		        ->addTab(null, function (Tab $tab) {
-			        $tab->addSection('organizer', function (Section $section) {
-				        $section->title(__('Organizer', $this->id()))
-				                ->checkbox('organizer.enable', __('Enable', $this->id()), [
-					                'label' => __('Allows to specify an organizer for the event.', $this->id()),
-				                ])
-				                ->text('organizer.default', __('Default organizer', $this->id()), [
-					                'class' => 'regular-text',
-				                ]);
-			        })
-			            ->addSection('calendar', function (Section $section) {
-				            $section->title(__('Calendar', $this->id()))
-				                    ->checkbox('calendar.enable', __('Enable', $this->id()), [
-					                    'label' => __('Creates a feed with the events in iCalendar format.', $this->id()),
-				                    ])
-				                    ->checkbox('calendar.name', __('Include the blog name', $this->id()), [
-					                    'label'       => __('Specifies the blog name as the calendar name.', $this->id()),
-					                    'description' => __('Uses the property <code>X-WR-CALNAME</code>. May cause problems in some applications.', $this->id()),
-				                    ])
-				                    ->number('calendar.limit', __('Limit the events', $this->id()), [
-					                    'min'         => 0,
-					                    'description' => __('Type <code>0</code> to include all events.', $this->id()),
-				                    ])
-				                    ->image_sizes('calendar.image', __('Image size', $this->id()));
-			            })
-			            ->onValidation(function ($values) {
-				            if (Arr::get($values, 'calendar.enable')) {
-					            add_feed(EventManager::FEED_TYPE, [$this->getPlugin(), 'getCalendar']);
-				            }
+		Settings::siteOptions($this->getOptions(), $this->name())
+		        ->section('organizer', function (Section $section) {
+			        $section->title(__('Organizer', $this->id()))
+			                ->checkbox('organizer.enable', __('Enable', $this->id()), [
+				                'label' => __('Allows to specify an organizer for the event.', $this->id()),
+			                ])
+			                ->text('organizer.default', __('Default organizer', $this->id()), [
+				                'class' => 'regular-text',
+			                ]);
+		        })
+		        ->section('calendar', function (Section $section) {
+			        $section->title(__('Calendar', $this->id()))
+			                ->checkbox('calendar.enable', __('Enable', $this->id()), [
+				                'label' => __('Creates a feed with the events in iCalendar format.', $this->id()),
+			                ])
+			                ->checkbox('calendar.name', __('Include the blog name', $this->id()), [
+				                'label'       => __('Specifies the blog name as the calendar name.', $this->id()),
+				                'description' => __('Uses the property <code>X-WR-CALNAME</code>. May cause problems in some applications.', $this->id()),
+			                ])
+			                ->number('calendar.limit', __('Limit the events', $this->id()), [
+				                'min'         => 0,
+				                'description' => __('Type <code>0</code> to include all events.', $this->id()),
+			                ])
+			                ->image_sizes('calendar.image', __('Image size', $this->id()));
+		        })
+		        ->finalization(function (array $values) {
+			        if (Arr::get($values, 'calendar.enable')) {
+				        add_feed(EventManager::FEED_TYPE, [
+					        $this->getPlugin(),
+					        'getCalendar',
+				        ]);
+			        }
 
-				            flush_rewrite_rules();
-
-				            return $values;
-			            });
+			        flush_rewrite_rules();
 		        });
 
 		$organizer = $this->getOption('organizer.enable');
 
 		Settings::optionsPermalink($this->getOptions())
-		        ->addSection('events', function (Section $section) use ($organizer) {
+		        ->section('events', function (Section $section) use ($organizer) {
 			        $section->title(__('Custom structures for events', $this->id()))
 			                ->text('slug.event', __('Event base', $this->id()), [
 				                'class' => 'regular-text code',
@@ -117,7 +113,7 @@ class Backend extends PluginClass
 	 */
 	protected function setFieldHours(array $field): array
 	{
-		$hours = $this->getTimeRange(23, 1);
+		$hours = $this->getTimeRange(23);
 
 		$field['choices'] = array_combine($hours, $hours);
 
@@ -147,10 +143,8 @@ class Backend extends PluginClass
 	{
 		$post = get_post($id);
 
-		if ($date = $this->getPlugin()
-		                 ->getEventDate($post)) {
-			$this->hook()
-			     ->disable('filterPostDate');
+		if ($date = $this->getPlugin()->getEventDate($post)) {
+			$this->hook()->disable('filterPostDate');
 
 			$post_date = sprintf('%s-%s-%s 00:00:00', $date['year'], $date['month'], $date['day']);
 
@@ -187,7 +181,7 @@ class Backend extends PluginClass
 	 */
 	protected function getTimeRange(int $limit, int $step = 1): array
 	{
-		return array_map(function ($number) {
+		return array_map(static function ($number) {
 			return str_pad((string) $number, 2, '0', STR_PAD_LEFT);
 		}, range(0, $limit, $step));
 	}
