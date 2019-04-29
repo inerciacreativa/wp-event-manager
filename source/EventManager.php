@@ -5,6 +5,7 @@ namespace ic\Plugin\EventManager;
 use ic\Framework\Plugin\Plugin;
 use ic\Framework\Type\PostType;
 use ic\Framework\Type\Taxonomy;
+use WP_Post;
 
 /**
  * Class EventManager
@@ -29,7 +30,7 @@ class EventManager extends Plugin
 	 */
 	protected function dependencies()
 	{
-		if (!\function_exists('register_field_group')) {
+		if (!function_exists('register_field_group')) {
 			return __('This plugin requires <a href="https://wordpress.org/plugins/advanced-custom-fields/" target="_blank">Advanced Custom Fields</a>. Please, install and activate ACF before activating this plugin.', $this->id());
 		}
 
@@ -44,6 +45,7 @@ class EventManager extends Plugin
 		// Convert the old taxonomy name.
 		global $wpdb;
 
+		/** @noinspection SqlResolve */
 		$taxonomy = $wpdb->get_var($wpdb->prepare("SELECT taxonomy FROM $wpdb->term_taxonomy WHERE taxonomy LIKE %s", 'event_%%'));
 
 		if ($taxonomy !== self::TAX_TYPE) {
@@ -79,9 +81,6 @@ class EventManager extends Plugin
 
 	/**
 	 * @inheritdoc
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	protected function initialize(): void
 	{
@@ -104,26 +103,23 @@ class EventManager extends Plugin
 			Taxonomy::create(self::TAX_TYPE, [self::POST_TYPE])
 			        ->nouns(__('Organizer', $this->id()), __('Organizers', $this->id()))
 			        ->rewrite($this->getOption('slug.organizer'), false)
-			        ->meta_box(false, false, true);
+			        ->meta_box(false, false);
 		}
 
 		if ($this->getOption('calendar.enable')) {
 			add_feed(self::FEED_TYPE, [$this, 'getCalendar']);
 
-			$this->hook()
-			     ->on('template_redirect', 'getEventCalendar');
+			$this->hook()->on('template_redirect', 'getEventCalendar');
 		}
 	}
 
 	/**
-	 * @param string   $link
-	 * @param \WP_Post $post
-	 *
-	 * @throws \RuntimeException
+	 * @param string  $link
+	 * @param WP_Post $post
 	 *
 	 * @return string
 	 */
-	public function getEventLink(string $link, \WP_Post $post): string
+	public function getEventLink(string $link, WP_Post $post): string
 	{
 		if ($date = $this->getEventDate($post)) {
 			$search  = $this->getOption('slug.event');
@@ -135,11 +131,11 @@ class EventManager extends Plugin
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 *
 	 * @return array|null
 	 */
-	public function getEventDate(\WP_Post $post): ?array
+	public function getEventDate(WP_Post $post): ?array
 	{
 		if ($post->post_type !== self::POST_TYPE) {
 			return null;
@@ -161,42 +157,32 @@ class EventManager extends Plugin
 	 * @param array  $arguments
 	 *
 	 * @return array
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	public function getEvents(string $image = 'thumbnail', array $arguments = []): array
 	{
-		return Events::create($this)
-		             ->events($image, $arguments);
+		return Events::create($this)->events($image, $arguments);
 	}
 
 	/**
-	 * @param \WP_Post $post
-	 * @param string   $image
+	 * @param WP_Post $post
+	 * @param string  $image
 	 *
 	 * @return Event
 	 */
-	public function getEvent(\WP_Post $post, string $image = 'thumbnail'): Event
+	public function getEvent(WP_Post $post, string $image = 'thumbnail'): Event
 	{
-		return Events::create($this)
-		             ->event($post, $image);
+		return Events::create($this)->event($post, $image);
 	}
 
 	/**
 	 * Retrieves the .ics file.
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	public function getCalendar(): void
 	{
 		$events = Events::create($this)
 		                ->events($this->getOption('calendar.image'), $this->getOption('calendar.limit'));
 
-		Calendar::create($this)
-		        ->addEvents($events)
-		        ->send();
+		Calendar::create($this)->addEvents($events)->send();
 	}
 
 	/**
@@ -208,9 +194,7 @@ class EventManager extends Plugin
 			return;
 		}
 
-		Calendar::create($this)
-		        ->addPost(get_post())
-		        ->send();
+		Calendar::create($this)->addPost(get_post())->send();
 	}
 
 }

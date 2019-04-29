@@ -22,9 +22,6 @@ class CustomFields
      * @param EventManager $plugin
      *
      * @return static
-     *
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
      */
     public static function register(EventManager $plugin)
     {
@@ -35,9 +32,6 @@ class CustomFields
      * CustomFields constructor.
      *
      * @param EventManager $plugin
-     *
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
      */
     public function __construct(EventManager $plugin)
     {
@@ -46,9 +40,11 @@ class CustomFields
         if (!$this->getOption('acf')) {
             global $wpdb;
 
+	        /** @noinspection SqlResolve */
             $id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_name = %s", self::ACF_TYPE, self::ACF_NAME));
 
             $this->setOption('acf', $id ? 'database' : 'class');
+	        /** @noinspection NullPointerExceptionInspection */
             $this->getOptions()->save();
         }
 

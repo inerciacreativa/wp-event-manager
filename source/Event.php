@@ -2,17 +2,21 @@
 
 namespace ic\Plugin\EventManager;
 
+use DateTime;
+use ic\Framework\Data\Options;
 use ic\Framework\Support\Date;
-use ic\Framework\Support\Options;
+use ic\Framework\Support\Limiter;
 use ic\Framework\Support\Str;
-use ic\Framework\Support\TextLimiter;
+use InvalidArgumentException;
+use RuntimeException;
+use WP_Post;
 
 /**
  * Class Event
  *
  * @package ic\Plugin\EventManager
  *
- * @property-read \WP_Post    $post
+ * @property-read WP_Post     $post
  * @property-read int         $uid
  * @property-read string      $name
  * @property-read string      $uri
@@ -32,7 +36,7 @@ class Event
 {
 
 	/**
-	 * @var \WP_Post
+	 * @var WP_Post
 	 */
 	private $post;
 
@@ -72,17 +76,17 @@ class Event
 	private $image;
 
 	/**
-	 * @var \DateTime
+	 * @var DateTime
 	 */
 	private $dateStamp;
 
 	/**
-	 * @var \DateTime
+	 * @var DateTime
 	 */
 	private $startDate;
 
 	/**
-	 * @var \DateTime
+	 * @var DateTime
 	 */
 	private $endDate;
 
@@ -104,20 +108,23 @@ class Event
 	/**
 	 * CalendarEvent constructor.
 	 *
-	 * @param \WP_Post $post
-	 * @param string   $image
-	 * @param Options  $options
+	 * @param WP_Post $post
+	 * @param string  $image
+	 * @param Options $options
+	 *
+	 * @throws InvalidArgumentException
+	 * @throws RuntimeException
 	 */
-	public function __construct(\WP_Post $post, string $image, Options $options)
+	public function __construct(WP_Post $post, string $image, Options $options)
 	{
 		if ($post->post_type !== EventManager::POST_TYPE) {
-			throw new \InvalidArgumentException(sprintf('The post has an incorrect post type "%s" (ID %d).', $post->post_type, $post->ID));
+			throw new InvalidArgumentException(sprintf('The post has an incorrect post type "%s" (ID %d).', $post->post_type, $post->ID));
 		}
 
 		$event = get_fields($post->ID);
 
 		if (empty($event)) {
-			throw new \RuntimeException(sprintf('There are no event information for the post (ID %d).', $post->ID));
+			throw new RuntimeException(sprintf('There are no event information for the post (ID %d).', $post->ID));
 		}
 
 		$this->post        = $post;
@@ -139,24 +146,24 @@ class Event
 	/**
 	 * @param string $name
 	 *
-	 * @throws \InvalidArgumentException
+	 * @return mixed
 	 *
-	 * @return int|string|\DateTime
+	 * @throws InvalidArgumentException
 	 */
-	public function __get($name)
+	public function __get(string $name)
 	{
 		if (property_exists($this, $name)) {
 			return $this->$name;
 		}
 
-		throw new \InvalidArgumentException(sprintf('%s does not exists.', $name));
+		throw new InvalidArgumentException(sprintf('%s does not exists.', $name));
 	}
 
 	/**
 	 * @param $name
 	 * @param $value
 	 */
-	public function __set($name, $value)
+	public function __set(string $name, $value)
 	{
 	}
 
@@ -165,7 +172,7 @@ class Event
 	 *
 	 * @return bool
 	 */
-	public function __isset($name)
+	public function __isset(string $name)
 	{
 		return property_exists($this, $name);
 	}
@@ -174,6 +181,8 @@ class Event
 	 * @param array $event
 	 *
 	 * @return Date
+	 *
+	 * @throws InvalidArgumentException
 	 */
 	protected static function getStartDate(array $event): Date
 	{
@@ -187,6 +196,8 @@ class Event
 	 * @param array $event
 	 *
 	 * @return Date
+	 *
+	 * @throws InvalidArgumentException
 	 */
 	protected static function getEndDate(array $event): Date
 	{
@@ -216,11 +227,11 @@ class Event
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 *
 	 * @return string
 	 */
-	protected static function getSummary(\WP_Post $post): string
+	protected static function getSummary(WP_Post $post): string
 	{
 		$summary = strip_shortcodes($post->post_content);
 		$summary = apply_filters('the_content', $summary);
@@ -232,7 +243,7 @@ class Event
 		}
 
 		$length  = Str::length($summary);
-		$summary = rtrim(TextLimiter::words($summary, 60));
+		$summary = rtrim(Limiter::words($summary, 60));
 
 		if (!empty($summary) && ($length > Str::length($summary))) {
 			$summary .= '…';
@@ -242,12 +253,12 @@ class Event
 	}
 
 	/**
-	 * @param \WP_Post $post
-	 * @param string   $size
+	 * @param WP_Post $post
+	 * @param string  $size
 	 *
-	 * @return \stdClass
+	 * @return object|null
 	 */
-	protected static function getImage(\WP_Post $post, string $size): ?\stdClass
+	protected static function getImage(WP_Post $post, string $size): ?object
 	{
 		$id = get_post_meta($post->ID, '_thumbnail_id', true);
 
@@ -269,17 +280,17 @@ class Event
 	}
 
 	/**
-	 * @param \WP_Post $post
-	 * @param Options  $options
+	 * @param WP_Post $post
+	 * @param Options $options
 	 *
 	 * @return string
 	 */
-	protected static function getOrganizer(\WP_Post $post, Options $options): string
+	protected static function getOrganizer(WP_Post $post, Options $options): string
 	{
 		if ($options->get('organizer.enable')) {
 			$terms = get_the_terms($post, EventManager::TAX_TYPE);
 
-			if (\is_array($terms)) {
+			if (is_array($terms)) {
 				return $terms[0]->name;
 			}
 

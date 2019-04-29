@@ -2,9 +2,11 @@
 
 namespace ic\Plugin\EventManager;
 
-use ic\Framework\Hook\HookDecorator;
+use ic\Framework\Data\Options;
+use ic\Framework\Hook\Hookable;
 use ic\Framework\Support\Date;
-use ic\Framework\Support\Options;
+use WP_Post;
+use WP_Query;
 
 /**
  * Class Events
@@ -14,7 +16,7 @@ use ic\Framework\Support\Options;
 class Events
 {
 
-	use HookDecorator;
+	use Hookable;
 
 	/**
 	 * @var Options
@@ -25,9 +27,6 @@ class Events
 	 * @param EventManager $plugin
 	 *
 	 * @return static
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	public static function create(EventManager $plugin): Events
 	{
@@ -38,9 +37,6 @@ class Events
 	 * Calendar constructor.
 	 *
 	 * @param EventManager $plugin
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	public function __construct(EventManager $plugin)
 	{
@@ -74,9 +70,9 @@ class Events
 	/**
 	 * @param array $arguments
 	 *
-	 * @return \WP_Query
+	 * @return WP_Query
 	 */
-	public function query(array $arguments = []): \WP_Query
+	public function query(array $arguments = []): WP_Query
 	{
 		$arguments = array_merge([
 			'posts_per_page' => -1,
@@ -97,16 +93,16 @@ class Events
 
 		unset($arguments['no_date_filter']);
 
-		return new \WP_Query($arguments);
+		return new WP_Query($arguments);
 	}
 
 	/**
-	 * @param \WP_Post $post
-	 * @param string   $image
+	 * @param WP_Post $post
+	 * @param string  $image
 	 *
 	 * @return Event
 	 */
-	public function event(\WP_Post $post, string $image): ?Event
+	public function event(WP_Post $post, string $image): ?Event
 	{
 		return new Event($post, $image, $this->options);
 	}

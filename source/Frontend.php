@@ -5,6 +5,7 @@ namespace ic\Plugin\EventManager;
 use ic\Framework\Html\Tag;
 use ic\Framework\Plugin\PluginClass;
 use ic\Framework\Support\Date;
+use WP_Query;
 
 /**
  * Class Frontend
@@ -44,11 +45,11 @@ class Frontend extends PluginClass
 	}
 
 	/**
-	 * Filters the \WP_Query object when retrieving events.
+	 * Filters the WP_Query object when retrieving events.
 	 *
-	 * @param \WP_Query $query
+	 * @param WP_Query $query
 	 */
-	protected function filterEvents(\WP_Query $query): void
+	protected function filterEvents(WP_Query $query): void
 	{
 		if (empty($query->query) || !isset($query->query['post_type']) || ($query->query['post_type'] !== EventManager::POST_TYPE) || isset($query->query[EventManager::QUERY_ALL]) || $query->is_main_query()) {
 			return;

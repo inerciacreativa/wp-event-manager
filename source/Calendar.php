@@ -2,9 +2,10 @@
 
 namespace ic\Plugin\EventManager;
 
+use ic\Framework\Data\Options;
 use ic\Framework\Support\Arr;
 use ic\Framework\Support\Str;
-use ic\Framework\Support\Options;
+use WP_Post;
 
 /**
  * Class Calendar
@@ -28,9 +29,6 @@ class Calendar
 	 * @param EventManager $plugin
 	 *
 	 * @return static
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	public static function create(EventManager $plugin): Calendar
 	{
@@ -41,9 +39,6 @@ class Calendar
 	 * Calendar constructor.
 	 *
 	 * @param EventManager $plugin
-	 *
-	 * @throws \RuntimeException
-	 * @throws \InvalidArgumentException
 	 */
 	public function __construct(EventManager $plugin)
 	{
@@ -77,12 +72,12 @@ class Calendar
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 * @param string   $image
 	 *
 	 * @return $this
 	 */
-	public function addPost(\WP_Post $post, string $image = 'thumbnail'): self
+	public function addPost(WP_Post $post, string $image = 'thumbnail'): self
 	{
 		return $this->addEvent(new Event($post, $image, $this->options));
 	}
@@ -110,10 +105,10 @@ class Calendar
 	 */
 	protected function getFilename(): string
 	{
-		if (\count($this->events) === 1) {
+		if (count($this->events) === 1) {
 			$event = reset($this->events);
 			$name  = $event->name;
-		} else if (\count($this->events) > 1) {
+		} else if (count($this->events) > 1) {
 			$event = end($this->events);
 			$name  = get_bloginfo('name');
 		} else {
@@ -187,7 +182,7 @@ class Calendar
 	 */
 	protected function serialize(array $input): string
 	{
-		$serialized = Arr::map(array_filter($input), function ($key, $value) {
+		$serialized = Arr::map(array_filter($input), static function ($key, $value) {
 			return ($key === 'EVENTS') ? $value : "$key:$value\r\n";
 		});
 

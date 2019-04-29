@@ -2,6 +2,8 @@
 
 namespace ic\Plugin\EventManager;
 
+use WP_Post;
+
 /**
  * @param string $image
  * @param array  $arguments
@@ -10,18 +12,16 @@ namespace ic\Plugin\EventManager;
  */
 function events(string $image = 'thumbnail', array $arguments = []): array
 {
-	return EventManager::instance()
-	                   ->getEvents($image, $arguments);
+	return EventManager::instance()->getEvents($image, $arguments);
 }
 
 /**
- * @param \WP_Post $post
- * @param string   $image
+ * @param WP_Post $post
+ * @param string  $image
  *
  * @return Event
  */
-function event(\WP_Post $post, string $image = 'thumbnail'): Event
+function event(WP_Post $post, string $image = 'thumbnail'): Event
 {
-	return EventManager::instance()
-	                   ->getEvent($post, $image);
+	return EventManager::instance()->getEvent($post, $image);
 }
