@@ -30,9 +30,6 @@
   "autoload": {
     "psr-4": {
       "ic\\Plugin\\EventManager\\": "source/"
-    },
-    "files": [
-      "source/helpers.php"
-    ]
+    }
   }
 }

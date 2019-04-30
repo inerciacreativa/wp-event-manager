@@ -34,4 +34,6 @@ if (!class_exists(EventManager::class)) {
 	}
 }
 
+include_once __DIR__ . '/source/helpers.php';
+
 EventManager::create(__FILE__);
