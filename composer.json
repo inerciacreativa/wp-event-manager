@@ -18,8 +18,7 @@
     }
   ],
   "require": {
-    "php": ">=7.2",
-    "composer/installers": "^1.5"
+    "php": ">=7.2"
   },
   "config": {
     "vendor-dir": "vendor"
