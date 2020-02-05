@@ -45,7 +45,6 @@ class EventManager extends Plugin
 		// Convert the old taxonomy name.
 		global $wpdb;
 
-		/** @noinspection SqlResolve */
 		$taxonomy = $wpdb->get_var($wpdb->prepare("SELECT taxonomy FROM $wpdb->term_taxonomy WHERE taxonomy LIKE %s", 'event_%%'));
 
 		if ($taxonomy !== self::TAX_TYPE) {
@@ -87,23 +86,23 @@ class EventManager extends Plugin
 		CustomFields::register($this);
 
 		PostType::create(self::POST_TYPE)
-		        ->nouns(__('Event', $this->id()), __('Events', $this->id()))
-		        ->rewrite($this->getOption('slug.event'), false)
-		        ->filter_link([$this, 'getEventLink'])
-		        ->menu('dashicons-calendar')
-		        ->supports([
-			        'title',
-			        'editor',
-			        'thumbnail',
-			        'comments',
-			        'author',
-		        ]);
+				->nouns(__('Event', $this->id()), __('Events', $this->id()))
+				->rewrite($this->getOption('slug.event'), false)
+				->filter_link([$this, 'getEventLink'])
+				->menu('dashicons-calendar')
+				->supports([
+					'title',
+					'editor',
+					'thumbnail',
+					'comments',
+					'author',
+				]);
 
 		if ($this->getOption('organizer.enable')) {
 			Taxonomy::create(self::TAX_TYPE, [self::POST_TYPE])
-			        ->nouns(__('Organizer', $this->id()), __('Organizers', $this->id()))
-			        ->rewrite($this->getOption('slug.organizer'), false)
-			        ->meta_box(false, false);
+					->nouns(__('Organizer', $this->id()), __('Organizers', $this->id()))
+					->rewrite($this->getOption('slug.organizer'), false)
+					->meta_box(false, false);
 		}
 
 		if ($this->getOption('calendar.enable')) {
@@ -180,7 +179,7 @@ class EventManager extends Plugin
 	public function getCalendar(): void
 	{
 		$events = Events::create($this)
-		                ->events($this->getOption('calendar.image'), $this->getOption('calendar.limit'));
+						->events($this->getOption('calendar.image'), ['posts_per_page' => $this->getOption('calendar.limit')]);
 
 		Calendar::create($this)->addEvents($events)->send();
 	}
