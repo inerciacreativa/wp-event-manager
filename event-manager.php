@@ -2,7 +2,7 @@
 /**
  * Plugin Name: ic Event Manager
  * Plugin URI:  https://github.com/inerciacreativa/wp-event-manager
- * Version:     4.0.2
+ * Version:     5.0.0
  * Text Domain: ic-event-manager
  * Domain Path: /languages
  * Description: Sencillo gestor de eventos.
