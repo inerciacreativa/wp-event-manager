@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ic Event Manager\n"
-"POT-Creation-Date: 2018-05-01 05:41+0200\n"
-"PO-Revision-Date: 2018-05-01 05:42+0200\n"
+"POT-Creation-Date: 2020-02-08 13:58+0100\n"
+"PO-Revision-Date: 2020-02-08 13:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: Jose Cuesta <jose.cuesta@inerciacreativa.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.3\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
@@ -18,39 +18,39 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: source/Backend.php:60 source/EventManager.php:101
+#: source/Backend.php:58 source/EventManager.php:104
 msgid "Organizer"
 msgstr "Organizador"
 
-#: source/Backend.php:61 source/Backend.php:69
+#: source/Backend.php:59 source/Backend.php:68
 msgid "Enable"
 msgstr "Habilitar"
 
-#: source/Backend.php:62
+#: source/Backend.php:60
 msgid "Allows to specify an organizer for the event."
 msgstr "Permite especificar un organizador para el evento."
 
-#: source/Backend.php:64
+#: source/Backend.php:62
 msgid "Default organizer"
 msgstr "Organizador por defecto"
 
-#: source/Backend.php:68
+#: source/Backend.php:67
 msgid "Calendar"
 msgstr "Calendario"
 
-#: source/Backend.php:70
+#: source/Backend.php:69
 msgid "Creates a feed with the events in iCalendar format."
 msgstr "Crea un feed con los eventos en formato iCalendar."
 
-#: source/Backend.php:72
+#: source/Backend.php:71
 msgid "Include the blog name"
 msgstr "Incluye el nombre del blog"
 
-#: source/Backend.php:73
+#: source/Backend.php:72
 msgid "Specifies the blog name as the calendar name."
 msgstr "Usa el nombre del blog como nombre del calendario."
 
-#: source/Backend.php:74
+#: source/Backend.php:73
 msgid ""
 "Uses the property <code>X-WR-CALNAME</code>. May cause problems in some "
 "applications."
@@ -58,83 +58,87 @@ msgstr ""
 "Usa la propiedad <code>X-WR-CALNAME</code>. Puede causar problemas con "
 "algunas aplicaciones."
 
-#: source/Backend.php:76
+#: source/Backend.php:75
 msgid "Limit the events"
 msgstr "Límite de eventos"
 
-#: source/Backend.php:78
+#: source/Backend.php:77
 msgid "Type <code>0</code> to include all events."
 msgstr "Con <code>0</code> se incluyen todos los eventos."
 
-#: source/Backend.php:80
+#: source/Backend.php:79
+msgid "Number of words in the summary"
+msgstr "Número de palabras en el sumario"
+
+#: source/Backend.php:82
 msgid "Image size"
 msgstr "Tamaño de imagen"
 
-#: source/Backend.php:96
+#: source/Backend.php:99
 msgid "Custom structures for events"
 msgstr "Estructuras personalizadas para los eventos"
 
-#: source/Backend.php:97
+#: source/Backend.php:100
 msgid "Event base"
 msgstr "Evento base"
 
-#: source/Backend.php:102
+#: source/Backend.php:105
 msgid "Organizer base"
 msgstr "Organizador base"
 
-#: source/CustomFields.php:67 source/EventManager.php:87
+#: source/CustomFields.php:63 source/EventManager.php:90
 msgid "Event"
 msgstr "Evento"
 
-#: source/CustomFields.php:71
+#: source/CustomFields.php:67
 msgid "Event website"
 msgstr "Web del evento"
 
-#: source/CustomFields.php:83
+#: source/CustomFields.php:79
 msgid "Date"
 msgstr "Fecha"
 
-#: source/CustomFields.php:89
+#: source/CustomFields.php:85
 msgid "All day event"
 msgstr "El evento dura todo el día"
 
-#: source/CustomFields.php:97
+#: source/CustomFields.php:93
 msgid "Show end date"
 msgstr "Mostrar fecha de fin"
 
-#: source/CustomFields.php:105
+#: source/CustomFields.php:101
 msgid "Start date"
 msgstr "Fecha de inicio"
 
-#: source/CustomFields.php:115 source/CustomFields.php:161
+#: source/CustomFields.php:111 source/CustomFields.php:157
 msgid "Start time"
 msgstr "Hora de inicio"
 
-#: source/CustomFields.php:195
+#: source/CustomFields.php:191
 msgid "End date"
 msgstr "Fecha de fin"
 
-#: source/CustomFields.php:204 source/CustomFields.php:250
+#: source/CustomFields.php:200 source/CustomFields.php:246
 msgid "End time"
 msgstr "Hora de fin"
 
-#: source/CustomFields.php:284
+#: source/CustomFields.php:280
 msgid "Location"
 msgstr "Lugar"
 
-#: source/CustomFields.php:290
+#: source/CustomFields.php:286
 msgid "Venue"
 msgstr "Nombre del sitio"
 
-#: source/CustomFields.php:302
+#: source/CustomFields.php:298
 msgid "Address"
 msgstr "Dirección"
 
-#: source/CustomFields.php:314
+#: source/CustomFields.php:310
 msgid "City"
 msgstr "Ciudad"
 
-#: source/EventManager.php:29
+#: source/EventManager.php:34
 msgid ""
 "This plugin requires <a href=\"https://wordpress.org/plugins/advanced-custom-"
 "fields/\" target=\"_blank\">Advanced Custom Fields</a>. Please, install and "
@@ -144,15 +148,15 @@ msgstr ""
 "fields/\" target=\"_blank\">Advanced Custom Fields</a>. Por favor, instala y "
 "activa ACF antes de activa este plugin."
 
-#: source/EventManager.php:87
+#: source/EventManager.php:90
 msgid "Events"
 msgstr "Eventos"
 
-#: source/EventManager.php:101
+#: source/EventManager.php:104
 msgid "Organizers"
 msgstr "Organizadores"
 
-#: source/Frontend.php:40
+#: source/Frontend.php:41
 msgid "Subscribe to events — iCalendar"
 msgstr "Suscríbete a los eventos — iCalendar"
 
