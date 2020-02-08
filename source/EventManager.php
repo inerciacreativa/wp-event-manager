@@ -71,6 +71,7 @@ class EventManager extends Plugin
 			],
 			'calendar'  => [
 				'enable' => false,
+				'words'  => 50,
 				'name'   => true,
 				'limit'  => 0,
 				'image'  => 'medium',
