@@ -5,7 +5,6 @@ namespace ic\Plugin\EventManager;
 use DateTime;
 use ic\Framework\Data\Options;
 use ic\Framework\Support\Date;
-use ic\Framework\Support\Limiter;
 use ic\Framework\Support\Str;
 use InvalidArgumentException;
 use RuntimeException;
@@ -137,7 +136,7 @@ class Event
 		$this->startDate   = self::getStartDate($event);
 		$this->endDate     = self::getEndDate($event);
 		$this->location    = self::getLocation($event);
-		$this->summary     = self::getSummary($post);
+		$this->summary     = self::getSummary($post, $options);
 		$this->organizer   = self::getOrganizer($post, $options);
 		$this->image       = self::getImage($post, $image);
 		$this->web         = $event['url'];
@@ -228,26 +227,26 @@ class Event
 
 	/**
 	 * @param WP_Post $post
+	 * @param Options $options
 	 *
 	 * @return string
 	 */
-	protected static function getSummary(WP_Post $post): string
+	protected static function getSummary(WP_Post $post, Options $options): string
 	{
+		if (!empty($post->post_excerpt)) {
+			return $post->post_excerpt;
+		}
+
 		$summary = strip_shortcodes($post->post_content);
+		if (function_exists('excerpt_remove_blocks')) {
+			$summary = excerpt_remove_blocks($summary);
+		}
+
 		$summary = apply_filters('the_content', $summary);
-		$summary = strip_tags($summary);
-		$summary = trim(Str::whitespace($summary));
 
-		if (empty($summary)) {
-			return '';
-		}
-
-		$length  = Str::length($summary);
-		$summary = rtrim(Limiter::words($summary, 60));
-
-		if (!empty($summary) && ($length > Str::length($summary))) {
-			$summary .= '…';
-		}
+		$summary = Str::stripTags($summary, ['figure']);
+		$summary = Str::whitespace($summary);
+		$summary = Str::words($summary, (int) $options->get('calendar.words'));
 
 		return $summary;
 	}
