@@ -30,6 +30,10 @@ class EventManager extends Plugin
 	 */
 	protected function dependencies()
 	{
+		if (class_exists('WP_CLI')) {
+			return true;
+		}
+
 		if (!function_exists('register_field_group')) {
 			return __('This plugin requires <a href="https://wordpress.org/plugins/advanced-custom-fields/" target="_blank">Advanced Custom Fields</a>. Please, install and activate ACF before activating this plugin.', $this->id());
 		}
