@@ -182,7 +182,7 @@ class Calendar
 	 */
 	protected function serialize(array $input): string
 	{
-		$serialized = Arr::map(array_filter($input), static function ($key, $value) {
+		$serialized = Arr::map(array_filter($input), static function ($value, $key) {
 			return ($key === 'EVENTS') ? $value : "$key:$value\r\n";
 		});
 
