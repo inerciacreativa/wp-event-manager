@@ -26,6 +26,9 @@ use WP_Post;
  * @property-read Date        $dateStamp
  * @property-read Date        $startDate
  * @property-read Date        $endDate
+ * @property-read int         $days
+ * @property-read bool        $allDay
+ * @property-read bool        $isActive
  * @property-read array       $location
  * @property-read string      $organizer
  * @property-read string      $web
@@ -90,6 +93,21 @@ class Event
 	private $endDate;
 
 	/**
+	 * @var int
+	 */
+	private $days;
+
+	/**
+	 * @var bool
+	 */
+	private $allDay;
+
+	/**
+	 * @var bool
+	 */
+	private $isActive;
+
+	/**
 	 * @var array
 	 */
 	private $location;
@@ -135,6 +153,9 @@ class Event
 		$this->dateStamp   = Date::now();
 		$this->startDate   = self::getStartDate($event);
 		$this->endDate     = self::getEndDate($event);
+		$this->allDay      = $event['date_allday'];
+		$this->days        = (int) $this->startDate->get()->diff($this->endDate->get())->days;
+		$this->isActive    = $this->dateStamp->format('U') < $this->endDate->format('U');
 		$this->location    = self::getLocation($event);
 		$this->summary     = self::getSummary($post, $options);
 		$this->organizer   = self::getOrganizer($post, $options);
